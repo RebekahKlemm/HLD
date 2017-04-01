@@ -5,6 +5,7 @@ const Interest = require('./interestModel');
 const User = require('./userModel');
 const LatLong = require('./latLongModel');
 const Deadline = require('./deadlineModel');
+const Advocate = require('./advocateModel');
 
 // Many-to-Many
 User.belongsToMany(Interest, {through: 'userInterest'});
@@ -29,5 +30,6 @@ module.exports = {
     Interest: Interest,
     Alert: Alert,
     LatLong: LatLong,
-    Deadline: Deadline
+    Deadline: Deadline,
+    Advocate: Advocate
 };

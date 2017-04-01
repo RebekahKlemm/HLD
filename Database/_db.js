@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 
-const db = new Sequelize('postgres://localhost:5432/animalalerts', {
+const db = new Sequelize('postgres://localhost:5432/HLD', {
     logging: false
 });
 

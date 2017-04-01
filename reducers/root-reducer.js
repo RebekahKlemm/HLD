@@ -5,6 +5,7 @@ import alerts from './alert-reducer';
 import currentView from './currentView-reducer';
 import interests from './interest-reducer';
 import addressDetails from './addressDetails-reducer';
+import advocates from './advocate-reducer';
 
 
-export default combineReducers({users, alerts, currentView, interests, addressDetails});
+export default combineReducers({users, alerts, currentView, interests, addressDetails, advocates});

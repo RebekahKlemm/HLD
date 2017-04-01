@@ -15,6 +15,7 @@ export default function Nav() {
                             <li><Link href='#'>Signup <span className="sr-only">(current)</span></Link></li>
                             <li><a href="#/login">Login</a></li>
                             <li><a href="/api/users/logout">Logout</a></li>
+                            <li><a href="#/checkin">Check In</a></li>
                             {/*<li><a href="#/user/123">User123(Joe)</a></li>*/}
                             {/*<li><a href="#/user/456">User456(Bill)</a></li>*/}
                             {/*<li><a href="#/admin/789">Admin789(Susie)</a></li>*/}
@@ -22,7 +23,7 @@ export default function Nav() {
                         <ul className="nav navbar-nav navbar-right">
                             {/*<li><a href="#">Link</a></li>*/}
                         </ul>
-                    </div>
+                    </div>d
                 </div>
             </nav>
     )
