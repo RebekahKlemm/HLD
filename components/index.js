@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, hashHistory, IndexRoute } from 'react-router';
+import { Router, Route, hashHistory, IndexRoute, browserHistory } from 'react-router';
 // import Signup from './Signup';
 import SignupContainer from './containers/SignupContainer';
 import {App} from './App';
@@ -68,9 +68,9 @@ const onCheckInEnter = function (props){
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router history={hashHistory}>
+        <Router history={browserHistory}>
             <Route path='/' component={App} onEnter={onAppEnter}>
-                <IndexRoute component={SignupContainer}/>
+                <IndexRoute component={CheckInContainer} onEnter={onCheckInEnter}/>
                 <Route path ='/login' component={LoginContainer}/>
                 <Route path ='/welcome/:id' component={Welcome}/>
                 <Route path='/user/:id' component={UserDisplay} onEnter={onUserDisplayEnter}/>

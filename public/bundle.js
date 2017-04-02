@@ -171,11 +171,11 @@
 	    { store: _store2.default },
 	    _react2.default.createElement(
 	        _reactRouter.Router,
-	        { history: _reactRouter.hashHistory },
+	        { history: _reactRouter.browserHistory },
 	        _react2.default.createElement(
 	            _reactRouter.Route,
 	            { path: '/', component: _App.App, onEnter: onAppEnter },
-	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _SignupContainer2.default }),
+	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _CheckInContainer2.default, onEnter: onCheckInEnter }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _LoginContainer2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/welcome/:id', component: _Welcome2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/user/:id', component: _UserDisplay2.default, onEnter: onUserDisplayEnter }),
@@ -31037,8 +31037,8 @@
 	                { className: 'navbar-header' },
 	                _react2.default.createElement(
 	                    'a',
-	                    { className: 'navbar-brand', href: '#' },
-	                    'Animal Alerts'
+	                    { className: 'navbar-brand', href: '/' },
+	                    'Humane Lobby Day'
 	                )
 	            ),
 	            _react2.default.createElement(
@@ -31052,7 +31052,7 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
-	                            { href: '#' },
+	                            { href: '/' },
 	                            'Signup ',
 	                            _react2.default.createElement(
 	                                'span',
@@ -31065,26 +31065,8 @@
 	                        'li',
 	                        null,
 	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '#/login' },
-	                            'Login'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'li',
-	                        null,
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '/api/users/logout' },
-	                            'Logout'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'li',
-	                        null,
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '#/checkin' },
+	                            _reactRouter.Link,
+	                            { to: '/checkin' },
 	                            'Check In'
 	                        )
 	                    )
