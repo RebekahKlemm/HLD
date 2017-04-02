@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-// import Advocates from '../Advocates';
-// import FilterInput from '../FilterInput';
 import {connect} from 'react-redux';
 import {checkInAdvocate} from '../../actions/advocates';
 import SenBuds from '../SenBuds';

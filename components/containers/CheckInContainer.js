@@ -23,10 +23,18 @@ class CheckInContainer extends Component {
         const inputValue = this.state.inputValue.toLowerCase();
         const filteredAdvocates = this.props.advocates.allAdvocates.filter(advocate =>
             advocate.lastName.toLowerCase().match(inputValue));
-        console.log("here is filteredAdvocates", filteredAdvocates);
+        const totalYes = this.props.advocates.allAdvocates.filter(advocate => advocate.checkedIn === 'yes').length;
+        const totalNo = this.props.advocates.allAdvocates.filter(advocate => advocate.checkedIn === 'no').length;
+        const totalCancelled = this.props.advocates.allAdvocates.filter(advocate => advocate.checkedIn === 'cancelled').length;
+
         return (
             <div className='CheckInContainer center'>
                 <h2 className="center">Advocates</h2>
+                <h3>
+                    <span className="extraPadding"> Yes: {totalYes} </span>
+                    <span className="extraPadding"> No: {totalNo} </span>
+                    <span className="extraPadding"> Cancelled: {totalCancelled} </span>
+                </h3>
                 <FilterInput
                     handleChange={this.handleChange}
                     inputValue={inputValue}
