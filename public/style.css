@@ -107,4 +107,19 @@
     clear: both;
 }
 
+.center {
+    text-align: center;
+}
 
+.hover:hover {
+    background-color: lightgrey;
+}
+
+.padding {
+    padding: 8px;
+}
+
+.largeFont {
+    font-size: larger;
+    padding: 6px;
+}

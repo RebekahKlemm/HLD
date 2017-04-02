@@ -8,6 +8,8 @@ import LoginContainer from './containers/LoginContainer';
 import UserDisplay from './containers/UserDisplay';
 import AdminContainer from './containers/AdminContainer';
 import Welcome from './containers/Welcome';
+import CheckInContainer from './containers/CheckInContainer';
+import Advocate from './containers/Advocate';
 import {Provider} from 'react-redux';
 import store from '../store';
 import {addUtoDb} from '../actions/users';
@@ -16,19 +18,22 @@ import {receiveUsers, updateCurrentUser} from '../actions/users';
 import {receiveAlerts, updateCurrentAlerts} from '../actions/alerts';
 import {receiveInterests} from '../actions/interests';
 import {updateCurrentAddressDetails} from '../actions/addressDetails';
+import {receiveAdvocates, setCurrentAdvocate} from '../actions/advocates';
 
 const onAppEnter = function () {
     console.log('inside AppEnter');
     Promise.all([
         axios.get('/api/users'),
         axios.get('/api/alerts'),
-        axios.get('/api/interests')
+        axios.get('/api/interests'),
+        axios.get('/api/advocates')
     ])
         .then(responses => responses.map(r => r.data))
-        .then(([users, alerts, interests]) => {
+        .then(([users, alerts, interests, advocates]) => {
             store.dispatch(receiveUsers(users));
             store.dispatch(receiveAlerts(alerts));
             store.dispatch(receiveInterests(interests));
+            store.dispatch(receiveAdvocates(advocates));
         })
 
 };
@@ -49,6 +54,18 @@ const onUserDisplayEnter = function (props) {
 
 };
 
+const onAdvocateEnter = function (props){
+    axios.get('/api/advocates/' + props.params.id)
+        .then(response => response.data)
+        .then(advocate => store.dispatch(setCurrentAdvocate(advocate)))
+};
+
+const onCheckInEnter = function (props){
+    axios.get('/api/advocates/')
+        .then(response => response.data)
+        .then(advocates => store.dispatch(receiveAdvocates(advocates)))
+};
+
 ReactDOM.render(
     <Provider store={store}>
         <Router history={hashHistory}>
@@ -58,6 +75,8 @@ ReactDOM.render(
                 <Route path ='/welcome/:id' component={Welcome}/>
                 <Route path='/user/:id' component={UserDisplay} onEnter={onUserDisplayEnter}/>
                 <Route path='/admin/:id' component={AdminContainer} onEnter={onUserDisplayEnter}/>
+                <Route path='/checkin' component={CheckInContainer} onEnter={onCheckInEnter}/>
+                <Route path='/checkin/:id' component={Advocate} onEnter={onAdvocateEnter}/>
             </Route>
         </Router>
     </Provider>,

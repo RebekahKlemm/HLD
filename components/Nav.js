@@ -16,14 +16,10 @@ export default function Nav() {
                             <li><a href="#/login">Login</a></li>
                             <li><a href="/api/users/logout">Logout</a></li>
                             <li><a href="#/checkin">Check In</a></li>
-                            {/*<li><a href="#/user/123">User123(Joe)</a></li>*/}
-                            {/*<li><a href="#/user/456">User456(Bill)</a></li>*/}
-                            {/*<li><a href="#/admin/789">Admin789(Susie)</a></li>*/}
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
-                            {/*<li><a href="#">Link</a></li>*/}
                         </ul>
-                    </div>d
+                    </div>
                 </div>
             </nav>
     )

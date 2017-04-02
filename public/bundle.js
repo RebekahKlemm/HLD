@@ -82,9 +82,17 @@
 	
 	var _Welcome2 = _interopRequireDefault(_Welcome);
 	
+	var _CheckInContainer = __webpack_require__(572);
+	
+	var _CheckInContainer2 = _interopRequireDefault(_CheckInContainer);
+	
+	var _Advocate = __webpack_require__(575);
+	
+	var _Advocate2 = _interopRequireDefault(_Advocate);
+	
 	var _reactRedux = __webpack_require__(234);
 	
-	var _store = __webpack_require__(572);
+	var _store = __webpack_require__(576);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -96,27 +104,31 @@
 	
 	var _alerts = __webpack_require__(316);
 	
-	var _interests = __webpack_require__(587);
+	var _interests = __webpack_require__(591);
 	
 	var _addressDetails = __webpack_require__(300);
+	
+	var _advocates = __webpack_require__(592);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var onAppEnter = function onAppEnter() {
 	    console.log('inside AppEnter');
-	    Promise.all([_axios2.default.get('/api/users'), _axios2.default.get('/api/alerts'), _axios2.default.get('/api/interests')]).then(function (responses) {
+	    Promise.all([_axios2.default.get('/api/users'), _axios2.default.get('/api/alerts'), _axios2.default.get('/api/interests'), _axios2.default.get('/api/advocates')]).then(function (responses) {
 	        return responses.map(function (r) {
 	            return r.data;
 	        });
 	    }).then(function (_ref) {
-	        var _ref2 = _slicedToArray(_ref, 3),
+	        var _ref2 = _slicedToArray(_ref, 4),
 	            users = _ref2[0],
 	            alerts = _ref2[1],
-	            interests = _ref2[2];
+	            interests = _ref2[2],
+	            advocates = _ref2[3];
 	
 	        _store2.default.dispatch((0, _users.receiveUsers)(users));
 	        _store2.default.dispatch((0, _alerts.receiveAlerts)(alerts));
 	        _store2.default.dispatch((0, _interests.receiveInterests)(interests));
+	        _store2.default.dispatch((0, _advocates.receiveAdvocates)(advocates));
 	    });
 	};
 	
@@ -138,6 +150,22 @@
 	    });
 	};
 	
+	var onAdvocateEnter = function onAdvocateEnter(props) {
+	    _axios2.default.get('/api/advocates/' + props.params.id).then(function (response) {
+	        return response.data;
+	    }).then(function (advocate) {
+	        return _store2.default.dispatch((0, _advocates.setCurrentAdvocate)(advocate));
+	    });
+	};
+	
+	var onCheckInEnter = function onCheckInEnter(props) {
+	    _axios2.default.get('/api/advocates/').then(function (response) {
+	        return response.data;
+	    }).then(function (advocates) {
+	        return _store2.default.dispatch((0, _advocates.receiveAdvocates)(advocates));
+	    });
+	};
+	
 	_reactDom2.default.render(_react2.default.createElement(
 	    _reactRedux.Provider,
 	    { store: _store2.default },
@@ -151,7 +179,9 @@
 	            _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _LoginContainer2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/welcome/:id', component: _Welcome2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/user/:id', component: _UserDisplay2.default, onEnter: onUserDisplayEnter }),
-	            _react2.default.createElement(_reactRouter.Route, { path: '/admin/:id', component: _AdminContainer2.default, onEnter: onUserDisplayEnter })
+	            _react2.default.createElement(_reactRouter.Route, { path: '/admin/:id', component: _AdminContainer2.default, onEnter: onUserDisplayEnter }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/checkin', component: _CheckInContainer2.default, onEnter: onCheckInEnter }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/checkin/:id', component: _Advocate2.default, onEnter: onAdvocateEnter })
 	        )
 	    )
 	), document.getElementById('app'));
@@ -30798,6 +30828,8 @@
 	
 	var ADD_ADVOCATE = exports.ADD_ADVOCATE = 'ADD_ADVOCATE';
 	var RECEIVE_ADVOCATES = exports.RECEIVE_ADVOCATES = 'RECEIVE_ADVOCATES';
+	var SET_CURRENT_ADVOCATE = exports.SET_CURRENT_ADVOCATE = 'SET_CURRENT_ADVOCATE';
+	var CHECK_IN_ADVOCATE = exports.CHECK_IN_ADVOCATE = 'CHECK_IN_ADVOCATE';
 
 /***/ },
 /* 299 */
@@ -31058,8 +31090,7 @@
 	                    )
 	                ),
 	                _react2.default.createElement('ul', { className: 'nav navbar-nav navbar-right' })
-	            ),
-	            'd'
+	            )
 	        )
 	    );
 	}
@@ -51790,17 +51821,335 @@
 	    value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Advocates = __webpack_require__(573);
+	
+	var _Advocates2 = _interopRequireDefault(_Advocates);
+	
+	var _FilterInput = __webpack_require__(574);
+	
+	var _FilterInput2 = _interopRequireDefault(_FilterInput);
+	
+	var _reactRedux = __webpack_require__(234);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CheckInContainer = function (_Component) {
+	    _inherits(CheckInContainer, _Component);
+	
+	    function CheckInContainer(props) {
+	        _classCallCheck(this, CheckInContainer);
+	
+	        var _this = _possibleConstructorReturn(this, (CheckInContainer.__proto__ || Object.getPrototypeOf(CheckInContainer)).call(this, props));
+	
+	        _this.state = {
+	            inputValue: ''
+	        };
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(CheckInContainer, [{
+	        key: 'handleChange',
+	        value: function handleChange(evt) {
+	            var value = evt.target.value;
+	            this.setState({
+	                inputValue: value
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var inputValue = this.state.inputValue.toLowerCase();
+	            var filteredAdvocates = this.props.advocates.allAdvocates.filter(function (advocate) {
+	                return advocate.lastName.toLowerCase().match(inputValue);
+	            });
+	            console.log("here is filteredAdvocates", filteredAdvocates);
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'CheckInContainer center' },
+	                _react2.default.createElement(
+	                    'h2',
+	                    { className: 'center' },
+	                    'Advocates'
+	                ),
+	                _react2.default.createElement(_FilterInput2.default, {
+	                    handleChange: this.handleChange,
+	                    inputValue: inputValue
+	                }),
+	                _react2.default.createElement(_Advocates2.default, { className: 'center', advocates: filteredAdvocates })
+	            );
+	        }
+	    }]);
+	
+	    return CheckInContainer;
+	}(_react.Component);
+	
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	    return {
+	        advocates: state.advocates
+	    };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+	    return {};
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CheckInContainer);
+
+/***/ },
+/* 573 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = Advocates;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(178);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function Advocates(props) {
+	    var advocates = props.advocates;
+	
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        advocates.map(function (advocate) {
+	            return _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'checkin/' + advocate.id, className: 'center', key: advocate.id },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'hover largeFont' },
+	                    advocate.fullName
+	                )
+	            );
+	        })
+	    );
+	}
+
+/***/ },
+/* 574 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var FilterInput = function FilterInput(props) {
+	
+	    var handleChange = props.handleChange;
+	    var inputValue = props.inputValue;
+	
+	    return _react2.default.createElement(
+	        'form',
+	        { className: 'form-group', style: { marginTop: '20px' } },
+	        _react2.default.createElement('input', {
+	            onChange: handleChange,
+	            value: inputValue,
+	            className: 'form-control',
+	            placeholder: 'Enter advocate last name'
+	        })
+	    );
+	};
+	
+	exports.default = FilterInput;
+
+/***/ },
+/* 575 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(234);
+	
+	var _advocates = __webpack_require__(592);
+	
+	var _SenBuds = __webpack_require__(593);
+	
+	var _SenBuds2 = _interopRequireDefault(_SenBuds);
+	
+	var _RepBuds = __webpack_require__(594);
+	
+	var _RepBuds2 = _interopRequireDefault(_RepBuds);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// import Advocates from '../Advocates';
+	// import FilterInput from '../FilterInput';
+	
+	
+	var Advocate = function (_Component) {
+	    _inherits(Advocate, _Component);
+	
+	    function Advocate(props) {
+	        _classCallCheck(this, Advocate);
+	
+	        var _this = _possibleConstructorReturn(this, (Advocate.__proto__ || Object.getPrototypeOf(Advocate)).call(this, props));
+	
+	        _this.checkInAdvocate = _this.checkInAdvocate.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(Advocate, [{
+	        key: 'checkInAdvocate',
+	        value: function checkInAdvocate(evt) {
+	            var checkInStatus = evt.target.value;
+	            this.props.checkInAdvocate([this.props.advocate.id, checkInStatus]);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'center' },
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    this.props.advocate.fullName
+	                ),
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'padding' },
+	                    'Checked In? '
+	                ),
+	                _react2.default.createElement(
+	                    'select',
+	                    { type: 'select', value: this.props.advocate.checkedIn, onChange: this.checkInAdvocate },
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'yes' },
+	                        'Yes'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'no' },
+	                        'No'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'cancelled' },
+	                        'Cancelled'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'Notes: ',
+	                    this.props.advocate.notesAttendee
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    this.props.advocate.city
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    'Senator ',
+	                    this.props.advocate.senator
+	                ),
+	                _react2.default.createElement(_SenBuds2.default, { senator: this.props.advocate.senator, advocates: this.props.advocates, currentAdvocate: this.props.advocate }),
+	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    'Representative ',
+	                    this.props.advocate.representative
+	                ),
+	                _react2.default.createElement(_RepBuds2.default, { representative: this.props.advocate.representative, advocates: this.props.advocates, currentAdvocate: this.props.advocate })
+	            );
+	        }
+	    }]);
+	
+	    return Advocate;
+	}(_react.Component);
+	
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	    return {
+	        advocates: state.advocates,
+	        advocate: state.advocates.currentAdvocate
+	    };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+	    return {
+	        checkInAdvocate: function checkInAdvocate(_ref) {
+	            var _ref2 = _slicedToArray(_ref, 2),
+	                advocateId = _ref2[0],
+	                checkInStatus = _ref2[1];
+	
+	            dispatch((0, _advocates.checkInAdvocate)([advocateId, checkInStatus]));
+	        }
+	    };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Advocate);
+
+/***/ },
+/* 576 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
 	var _redux = __webpack_require__(243);
 	
-	var _rootReducer = __webpack_require__(573);
+	var _rootReducer = __webpack_require__(577);
 	
 	var _rootReducer2 = _interopRequireDefault(_rootReducer);
 	
-	var _reduxThunk = __webpack_require__(580);
+	var _reduxThunk = __webpack_require__(584);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reduxLogger = __webpack_require__(581);
+	var _reduxLogger = __webpack_require__(585);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
@@ -51815,7 +52164,7 @@
 	exports.default = store;
 
 /***/ },
-/* 573 */
+/* 577 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51830,27 +52179,27 @@
 	
 	var _redux = __webpack_require__(243);
 	
-	var _userReducer = __webpack_require__(574);
+	var _userReducer = __webpack_require__(578);
 	
 	var _userReducer2 = _interopRequireDefault(_userReducer);
 	
-	var _alertReducer = __webpack_require__(575);
+	var _alertReducer = __webpack_require__(579);
 	
 	var _alertReducer2 = _interopRequireDefault(_alertReducer);
 	
-	var _currentViewReducer = __webpack_require__(576);
+	var _currentViewReducer = __webpack_require__(580);
 	
 	var _currentViewReducer2 = _interopRequireDefault(_currentViewReducer);
 	
-	var _interestReducer = __webpack_require__(577);
+	var _interestReducer = __webpack_require__(581);
 	
 	var _interestReducer2 = _interopRequireDefault(_interestReducer);
 	
-	var _addressDetailsReducer = __webpack_require__(578);
+	var _addressDetailsReducer = __webpack_require__(582);
 	
 	var _addressDetailsReducer2 = _interopRequireDefault(_addressDetailsReducer);
 	
-	var _advocateReducer = __webpack_require__(579);
+	var _advocateReducer = __webpack_require__(583);
 	
 	var _advocateReducer2 = _interopRequireDefault(_advocateReducer);
 	
@@ -51859,7 +52208,7 @@
 	exports.default = (0, _redux.combineReducers)({ users: _userReducer2.default, alerts: _alertReducer2.default, currentView: _currentViewReducer2.default, interests: _interestReducer2.default, addressDetails: _addressDetailsReducer2.default, advocates: _advocateReducer2.default });
 
 /***/ },
-/* 574 */
+/* 578 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51933,7 +52282,7 @@
 	};
 
 /***/ },
-/* 575 */
+/* 579 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51987,7 +52336,7 @@
 	};
 
 /***/ },
-/* 576 */
+/* 580 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52026,7 +52375,7 @@
 	};
 
 /***/ },
-/* 577 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52072,7 +52421,7 @@
 	};
 
 /***/ },
-/* 578 */
+/* 582 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52120,7 +52469,7 @@
 	};
 
 /***/ },
-/* 579 */
+/* 583 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52139,7 +52488,13 @@
 	            newState.allAdvocates = [].concat(_toConsumableArray(newState.allAdvocates), [action.advocate]);
 	            break;
 	        case _constants.RECEIVE_ADVOCATES:
-	            newState.allAdvocates = [].concat(_toConsumableArray(newState.allAdvocates), _toConsumableArray(action.allAdvocates));
+	            newState.allAdvocates = action.allAdvocates;
+	            break;
+	        case _constants.SET_CURRENT_ADVOCATE:
+	            newState.currentAdvocate = Object.assign({}, action.currentAdvocate);
+	            break;
+	        case _constants.CHECK_IN_ADVOCATE:
+	            newState.currentAdvocate = Object.assign(newState.currentAdvocate, action.updatedAdvocate);
 	            break;
 	        default:
 	            return state;
@@ -52159,11 +52514,12 @@
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	var initialState = {
-	    allAdvocates: []
+	    allAdvocates: [],
+	    currentAdvocate: {}
 	};
 
 /***/ },
-/* 580 */
+/* 584 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -52191,7 +52547,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 581 */
+/* 585 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52203,11 +52559,11 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _core = __webpack_require__(582);
+	var _core = __webpack_require__(586);
 	
-	var _helpers = __webpack_require__(583);
+	var _helpers = __webpack_require__(587);
 	
-	var _defaults = __webpack_require__(586);
+	var _defaults = __webpack_require__(590);
 	
 	var _defaults2 = _interopRequireDefault(_defaults);
 	
@@ -52329,7 +52685,7 @@
 
 
 /***/ },
-/* 582 */
+/* 586 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52342,9 +52698,9 @@
 	
 	exports.printBuffer = printBuffer;
 	
-	var _helpers = __webpack_require__(583);
+	var _helpers = __webpack_require__(587);
 	
-	var _diff = __webpack_require__(584);
+	var _diff = __webpack_require__(588);
 	
 	var _diff2 = _interopRequireDefault(_diff);
 	
@@ -52475,7 +52831,7 @@
 	}
 
 /***/ },
-/* 583 */
+/* 587 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -52499,7 +52855,7 @@
 	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
 
 /***/ },
-/* 584 */
+/* 588 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52509,7 +52865,7 @@
 	});
 	exports.default = diffLogger;
 	
-	var _deepDiff = __webpack_require__(585);
+	var _deepDiff = __webpack_require__(589);
 	
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 	
@@ -52598,7 +52954,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 585 */
+/* 589 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -53027,7 +53383,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 586 */
+/* 590 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -53078,7 +53434,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 587 */
+/* 591 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53105,6 +53461,171 @@
 	        allInterests: allInterests
 	    };
 	};
+
+/***/ },
+/* 592 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.updateAdvocate = exports.setCurrentAdvocate = exports.receiveAdvocates = exports.addAdvocate = undefined;
+	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
+	exports.addAToDb = addAToDb;
+	exports.checkInAdvocate = checkInAdvocate;
+	
+	var _axios = __webpack_require__(273);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _constants = __webpack_require__(298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var addAdvocate = exports.addAdvocate = function addAdvocate(advocate) {
+	    return {
+	        type: _constants.ADD_ADVOCATE,
+	        advocate: advocate
+	    };
+	};
+	
+	// asynch action creator (thunk)
+	function addAToDb(advocate) {
+	    return function (dispatch) {
+	        return _axios2.default.post('/api/advocates/add', advocate).then(function (response) {
+	            return response.data;
+	        }).then(function (newAdvocate) {
+	            dispatch(addAdvocate(newAdvocate));
+	        });
+	    };
+	}
+	
+	var receiveAdvocates = exports.receiveAdvocates = function receiveAdvocates(allAdvocates) {
+	    return {
+	        type: _constants.RECEIVE_ADVOCATES,
+	        allAdvocates: allAdvocates
+	    };
+	};
+	
+	var setCurrentAdvocate = exports.setCurrentAdvocate = function setCurrentAdvocate(advocate) {
+	    return {
+	        type: _constants.SET_CURRENT_ADVOCATE,
+	        currentAdvocate: advocate
+	    };
+	};
+	
+	var updateAdvocate = exports.updateAdvocate = function updateAdvocate(updatedAdvocate) {
+	    return {
+	        type: _constants.CHECK_IN_ADVOCATE,
+	        updatedAdvocate: updatedAdvocate
+	    };
+	};
+	
+	// asynch action creator (thunk)
+	function checkInAdvocate(_ref) {
+	    var _ref2 = _slicedToArray(_ref, 2),
+	        advocateId = _ref2[0],
+	        checkInStatus = _ref2[1];
+	
+	    return function (dispatch) {
+	        return _axios2.default.post('/api/advocates/checkIn', [advocateId, checkInStatus]).then(function (updatedAdvocate) {
+	            return updatedAdvocate.data;
+	        }).then(function (updatedAdvocate) {
+	            dispatch(updateAdvocate(updatedAdvocate));
+	        });
+	    };
+	}
+	
+	// export const refreshUsers = function (users) {
+	//     return {
+	//         type: REFRESH_USERS,
+	//         users: users
+	//     };
+	// };
+
+/***/ },
+/* 593 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = SenBuds;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function SenBuds(props) {
+	    var senator = props.senator;
+	    var advocates = props.advocates.allAdvocates;
+	    var currentAdvocate = props.currentAdvocate;
+	    var filteredAdvocates = advocates.filter(function (advocate) {
+	        return advocate.id !== currentAdvocate.id && advocate.senator === senator;
+	    });
+	
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        filteredAdvocates.map(function (advocate) {
+	            return _react2.default.createElement(
+	                'div',
+	                { key: advocate.id },
+	                advocate.fullName,
+	                ' ',
+	                advocate.checkedIn
+	            );
+	        })
+	    );
+	}
+
+/***/ },
+/* 594 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = RepBuds;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function RepBuds(props) {
+	    var representative = props.representative;
+	    var advocates = props.advocates.allAdvocates;
+	    var currentAdvocate = props.currentAdvocate;
+	    var filteredAdvocates = advocates.filter(function (advocate) {
+	        return advocate.id !== currentAdvocate.id && advocate.representative === representative;
+	    });
+	
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        filteredAdvocates.map(function (advocate) {
+	            return _react2.default.createElement(
+	                'div',
+	                { key: advocate.id },
+	                advocate.fullName,
+	                ' ',
+	                advocate.checkedIn
+	            );
+	        })
+	    );
+	}
 
 /***/ }
 /******/ ]);

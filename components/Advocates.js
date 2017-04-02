@@ -1,26 +1,19 @@
 import React, {Component} from 'react';
 
+import {Link} from 'react-router'
 
+export default function Advocates(props) {
+    let advocates = props.advocates;
 
-export default function Advocates(props){
-    // console.log("Advocate props --------------->", props);
-    const addressDetails = props.addressDetails;
-    let currentAdvocates = [...props.addressDetails.stateLegislators];
-    // currentAdvocates.reverse();
-    const currentUser = props.currentUser;
-
-    return(
-        <div className="clearfix">
-            <h3 id='stateLegHeader'>Advocates</h3>
-            { currentAdvocates.map((stateLegislator) => {
-                    return(
-                        <div className="stateLegislators col-sm-6" key={stateLegislator.id}>
-                            <img src={stateLegislator.photo_url} className="img-thumbnail"/>
-                            <h4>{ stateLegislator.full_name }</h4>
-                            <p>{stateLegislator.party}</p>
-                            <p>{stateLegislator.offices[0].phone}</p>
-                            <p>{stateLegislator.offices[0].email}</p>
-                        </div>
+    return (
+        <div>
+            { advocates.map((advocate) => {
+                    return (
+                        <Link to={`checkin/${advocate.id}`} className="center" key={advocate.id}>
+                            <div className="hover largeFont" >
+                                {advocate.fullName}
+                            </div>
+                        </Link>
                     )
                 }
             )}
