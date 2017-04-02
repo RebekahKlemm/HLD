@@ -77,6 +77,7 @@ ReactDOM.render(
                 <Route path='/admin/:id' component={AdminContainer} onEnter={onUserDisplayEnter}/>
                 <Route path='/checkin' component={CheckInContainer} onEnter={onCheckInEnter}/>
                 <Route path='/checkin/:id' component={Advocate} onEnter={onAdvocateEnter}/>
+                <Route path='/signup' component={SignupContainer}/>
             </Route>
         </Router>
     </Provider>,

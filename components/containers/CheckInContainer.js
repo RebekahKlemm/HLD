@@ -29,7 +29,7 @@ class CheckInContainer extends Component {
 
         return (
             <div className='CheckInContainer center'>
-                <h2 className="center">Advocates</h2>
+                <h2 className="center">Check In</h2>
                 <h3>
                     <span className="extraPadding"> Yes: {totalYes} </span>
                     <span className="extraPadding"> No: {totalNo} </span>

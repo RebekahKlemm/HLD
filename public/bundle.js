@@ -92,7 +92,7 @@
 	
 	var _reactRedux = __webpack_require__(234);
 	
-	var _store = __webpack_require__(576);
+	var _store = __webpack_require__(579);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -104,11 +104,11 @@
 	
 	var _alerts = __webpack_require__(316);
 	
-	var _interests = __webpack_require__(591);
+	var _interests = __webpack_require__(594);
 	
 	var _addressDetails = __webpack_require__(300);
 	
-	var _advocates = __webpack_require__(592);
+	var _advocates = __webpack_require__(576);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -181,7 +181,8 @@
 	            _react2.default.createElement(_reactRouter.Route, { path: '/user/:id', component: _UserDisplay2.default, onEnter: onUserDisplayEnter }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/admin/:id', component: _AdminContainer2.default, onEnter: onUserDisplayEnter }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/checkin', component: _CheckInContainer2.default, onEnter: onCheckInEnter }),
-	            _react2.default.createElement(_reactRouter.Route, { path: '/checkin/:id', component: _Advocate2.default, onEnter: onAdvocateEnter })
+	            _react2.default.createElement(_reactRouter.Route, { path: '/checkin/:id', component: _Advocate2.default, onEnter: onAdvocateEnter }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _SignupContainer2.default })
 	        )
 	    )
 	), document.getElementById('app'));
@@ -31052,7 +31053,7 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
-	                            { href: '/' },
+	                            { to: '/signup' },
 	                            'Signup ',
 	                            _react2.default.createElement(
 	                                'span',
@@ -51873,7 +51874,7 @@
 	                _react2.default.createElement(
 	                    'h2',
 	                    { className: 'center' },
-	                    'Advocates'
+	                    'Check In'
 	                ),
 	                _react2.default.createElement(
 	                    'h3',
@@ -52018,13 +52019,13 @@
 	
 	var _reactRedux = __webpack_require__(234);
 	
-	var _advocates = __webpack_require__(592);
+	var _advocates = __webpack_require__(576);
 	
-	var _SenBuds = __webpack_require__(593);
+	var _SenBuds = __webpack_require__(577);
 	
 	var _SenBuds2 = _interopRequireDefault(_SenBuds);
 	
-	var _RepBuds = __webpack_require__(594);
+	var _RepBuds = __webpack_require__(578);
 	
 	var _RepBuds2 = _interopRequireDefault(_RepBuds);
 	
@@ -52151,18 +52152,183 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.updateAdvocate = exports.setCurrentAdvocate = exports.receiveAdvocates = exports.addAdvocate = undefined;
+	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
+	exports.addAToDb = addAToDb;
+	exports.checkInAdvocate = checkInAdvocate;
+	
+	var _axios = __webpack_require__(273);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _constants = __webpack_require__(298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var addAdvocate = exports.addAdvocate = function addAdvocate(advocate) {
+	    return {
+	        type: _constants.ADD_ADVOCATE,
+	        advocate: advocate
+	    };
+	};
+	
+	// asynch action creator (thunk)
+	function addAToDb(advocate) {
+	    return function (dispatch) {
+	        return _axios2.default.post('/api/advocates/add', advocate).then(function (response) {
+	            return response.data;
+	        }).then(function (newAdvocate) {
+	            dispatch(addAdvocate(newAdvocate));
+	        });
+	    };
+	}
+	
+	var receiveAdvocates = exports.receiveAdvocates = function receiveAdvocates(allAdvocates) {
+	    return {
+	        type: _constants.RECEIVE_ADVOCATES,
+	        allAdvocates: allAdvocates
+	    };
+	};
+	
+	var setCurrentAdvocate = exports.setCurrentAdvocate = function setCurrentAdvocate(advocate) {
+	    return {
+	        type: _constants.SET_CURRENT_ADVOCATE,
+	        currentAdvocate: advocate
+	    };
+	};
+	
+	var updateAdvocate = exports.updateAdvocate = function updateAdvocate(updatedAdvocate) {
+	    return {
+	        type: _constants.CHECK_IN_ADVOCATE,
+	        updatedAdvocate: updatedAdvocate
+	    };
+	};
+	
+	// asynch action creator (thunk)
+	function checkInAdvocate(_ref) {
+	    var _ref2 = _slicedToArray(_ref, 2),
+	        advocateId = _ref2[0],
+	        checkInStatus = _ref2[1];
+	
+	    return function (dispatch) {
+	        return _axios2.default.post('/api/advocates/checkIn', [advocateId, checkInStatus]).then(function (updatedAdvocate) {
+	            return updatedAdvocate.data;
+	        }).then(function (updatedAdvocate) {
+	            dispatch(updateAdvocate(updatedAdvocate));
+	        });
+	    };
+	}
+	
+	// export const refreshUsers = function (users) {
+	//     return {
+	//         type: REFRESH_USERS,
+	//         users: users
+	//     };
+	// };
+
+/***/ },
+/* 577 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = SenBuds;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function SenBuds(props) {
+	    var senator = props.senator;
+	    var advocates = props.advocates.allAdvocates;
+	    var currentAdvocate = props.currentAdvocate;
+	    var filteredAdvocates = advocates.filter(function (advocate) {
+	        return advocate.id !== currentAdvocate.id && advocate.senator === senator;
+	    });
+	
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        filteredAdvocates.map(function (advocate) {
+	            return _react2.default.createElement(
+	                'div',
+	                { key: advocate.id },
+	                advocate.fullName,
+	                ' ',
+	                advocate.checkedIn
+	            );
+	        })
+	    );
+	}
+
+/***/ },
+/* 578 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = RepBuds;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function RepBuds(props) {
+	    var representative = props.representative;
+	    var advocates = props.advocates.allAdvocates;
+	    var currentAdvocate = props.currentAdvocate;
+	    var filteredAdvocates = advocates.filter(function (advocate) {
+	        return advocate.id !== currentAdvocate.id && advocate.representative === representative;
+	    });
+	
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        filteredAdvocates.map(function (advocate) {
+	            return _react2.default.createElement(
+	                'div',
+	                { key: advocate.id },
+	                advocate.fullName,
+	                ' ',
+	                advocate.checkedIn
+	            );
+	        })
+	    );
+	}
+
+/***/ },
+/* 579 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	
 	var _redux = __webpack_require__(243);
 	
-	var _rootReducer = __webpack_require__(577);
+	var _rootReducer = __webpack_require__(580);
 	
 	var _rootReducer2 = _interopRequireDefault(_rootReducer);
 	
-	var _reduxThunk = __webpack_require__(584);
+	var _reduxThunk = __webpack_require__(587);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reduxLogger = __webpack_require__(585);
+	var _reduxLogger = __webpack_require__(588);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
@@ -52177,7 +52343,7 @@
 	exports.default = store;
 
 /***/ },
-/* 577 */
+/* 580 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52192,27 +52358,27 @@
 	
 	var _redux = __webpack_require__(243);
 	
-	var _userReducer = __webpack_require__(578);
+	var _userReducer = __webpack_require__(581);
 	
 	var _userReducer2 = _interopRequireDefault(_userReducer);
 	
-	var _alertReducer = __webpack_require__(579);
+	var _alertReducer = __webpack_require__(582);
 	
 	var _alertReducer2 = _interopRequireDefault(_alertReducer);
 	
-	var _currentViewReducer = __webpack_require__(580);
+	var _currentViewReducer = __webpack_require__(583);
 	
 	var _currentViewReducer2 = _interopRequireDefault(_currentViewReducer);
 	
-	var _interestReducer = __webpack_require__(581);
+	var _interestReducer = __webpack_require__(584);
 	
 	var _interestReducer2 = _interopRequireDefault(_interestReducer);
 	
-	var _addressDetailsReducer = __webpack_require__(582);
+	var _addressDetailsReducer = __webpack_require__(585);
 	
 	var _addressDetailsReducer2 = _interopRequireDefault(_addressDetailsReducer);
 	
-	var _advocateReducer = __webpack_require__(583);
+	var _advocateReducer = __webpack_require__(586);
 	
 	var _advocateReducer2 = _interopRequireDefault(_advocateReducer);
 	
@@ -52221,7 +52387,7 @@
 	exports.default = (0, _redux.combineReducers)({ users: _userReducer2.default, alerts: _alertReducer2.default, currentView: _currentViewReducer2.default, interests: _interestReducer2.default, addressDetails: _addressDetailsReducer2.default, advocates: _advocateReducer2.default });
 
 /***/ },
-/* 578 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52295,7 +52461,7 @@
 	};
 
 /***/ },
-/* 579 */
+/* 582 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52349,7 +52515,7 @@
 	};
 
 /***/ },
-/* 580 */
+/* 583 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52388,7 +52554,7 @@
 	};
 
 /***/ },
-/* 581 */
+/* 584 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52434,7 +52600,7 @@
 	};
 
 /***/ },
-/* 582 */
+/* 585 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52482,7 +52648,7 @@
 	};
 
 /***/ },
-/* 583 */
+/* 586 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52532,7 +52698,7 @@
 	};
 
 /***/ },
-/* 584 */
+/* 587 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -52560,7 +52726,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 585 */
+/* 588 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52572,11 +52738,11 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _core = __webpack_require__(586);
+	var _core = __webpack_require__(589);
 	
-	var _helpers = __webpack_require__(587);
+	var _helpers = __webpack_require__(590);
 	
-	var _defaults = __webpack_require__(590);
+	var _defaults = __webpack_require__(593);
 	
 	var _defaults2 = _interopRequireDefault(_defaults);
 	
@@ -52698,7 +52864,7 @@
 
 
 /***/ },
-/* 586 */
+/* 589 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52711,9 +52877,9 @@
 	
 	exports.printBuffer = printBuffer;
 	
-	var _helpers = __webpack_require__(587);
+	var _helpers = __webpack_require__(590);
 	
-	var _diff = __webpack_require__(588);
+	var _diff = __webpack_require__(591);
 	
 	var _diff2 = _interopRequireDefault(_diff);
 	
@@ -52844,7 +53010,7 @@
 	}
 
 /***/ },
-/* 587 */
+/* 590 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -52868,7 +53034,7 @@
 	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
 
 /***/ },
-/* 588 */
+/* 591 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52878,7 +53044,7 @@
 	});
 	exports.default = diffLogger;
 	
-	var _deepDiff = __webpack_require__(589);
+	var _deepDiff = __webpack_require__(592);
 	
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 	
@@ -52967,7 +53133,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 589 */
+/* 592 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -53396,7 +53562,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 590 */
+/* 593 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -53447,7 +53613,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 591 */
+/* 594 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53474,171 +53640,6 @@
 	        allInterests: allInterests
 	    };
 	};
-
-/***/ },
-/* 592 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.updateAdvocate = exports.setCurrentAdvocate = exports.receiveAdvocates = exports.addAdvocate = undefined;
-	
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-	
-	exports.addAToDb = addAToDb;
-	exports.checkInAdvocate = checkInAdvocate;
-	
-	var _axios = __webpack_require__(273);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	var _constants = __webpack_require__(298);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var addAdvocate = exports.addAdvocate = function addAdvocate(advocate) {
-	    return {
-	        type: _constants.ADD_ADVOCATE,
-	        advocate: advocate
-	    };
-	};
-	
-	// asynch action creator (thunk)
-	function addAToDb(advocate) {
-	    return function (dispatch) {
-	        return _axios2.default.post('/api/advocates/add', advocate).then(function (response) {
-	            return response.data;
-	        }).then(function (newAdvocate) {
-	            dispatch(addAdvocate(newAdvocate));
-	        });
-	    };
-	}
-	
-	var receiveAdvocates = exports.receiveAdvocates = function receiveAdvocates(allAdvocates) {
-	    return {
-	        type: _constants.RECEIVE_ADVOCATES,
-	        allAdvocates: allAdvocates
-	    };
-	};
-	
-	var setCurrentAdvocate = exports.setCurrentAdvocate = function setCurrentAdvocate(advocate) {
-	    return {
-	        type: _constants.SET_CURRENT_ADVOCATE,
-	        currentAdvocate: advocate
-	    };
-	};
-	
-	var updateAdvocate = exports.updateAdvocate = function updateAdvocate(updatedAdvocate) {
-	    return {
-	        type: _constants.CHECK_IN_ADVOCATE,
-	        updatedAdvocate: updatedAdvocate
-	    };
-	};
-	
-	// asynch action creator (thunk)
-	function checkInAdvocate(_ref) {
-	    var _ref2 = _slicedToArray(_ref, 2),
-	        advocateId = _ref2[0],
-	        checkInStatus = _ref2[1];
-	
-	    return function (dispatch) {
-	        return _axios2.default.post('/api/advocates/checkIn', [advocateId, checkInStatus]).then(function (updatedAdvocate) {
-	            return updatedAdvocate.data;
-	        }).then(function (updatedAdvocate) {
-	            dispatch(updateAdvocate(updatedAdvocate));
-	        });
-	    };
-	}
-	
-	// export const refreshUsers = function (users) {
-	//     return {
-	//         type: REFRESH_USERS,
-	//         users: users
-	//     };
-	// };
-
-/***/ },
-/* 593 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = SenBuds;
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function SenBuds(props) {
-	    var senator = props.senator;
-	    var advocates = props.advocates.allAdvocates;
-	    var currentAdvocate = props.currentAdvocate;
-	    var filteredAdvocates = advocates.filter(function (advocate) {
-	        return advocate.id !== currentAdvocate.id && advocate.senator === senator;
-	    });
-	
-	    return _react2.default.createElement(
-	        'div',
-	        null,
-	        filteredAdvocates.map(function (advocate) {
-	            return _react2.default.createElement(
-	                'div',
-	                { key: advocate.id },
-	                advocate.fullName,
-	                ' ',
-	                advocate.checkedIn
-	            );
-	        })
-	    );
-	}
-
-/***/ },
-/* 594 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = RepBuds;
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function RepBuds(props) {
-	    var representative = props.representative;
-	    var advocates = props.advocates.allAdvocates;
-	    var currentAdvocate = props.currentAdvocate;
-	    var filteredAdvocates = advocates.filter(function (advocate) {
-	        return advocate.id !== currentAdvocate.id && advocate.representative === representative;
-	    });
-	
-	    return _react2.default.createElement(
-	        'div',
-	        null,
-	        filteredAdvocates.map(function (advocate) {
-	            return _react2.default.createElement(
-	                'div',
-	                { key: advocate.id },
-	                advocate.fullName,
-	                ' ',
-	                advocate.checkedIn
-	            );
-	        })
-	    );
-	}
 
 /***/ }
 /******/ ]);
