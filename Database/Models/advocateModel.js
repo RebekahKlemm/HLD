@@ -38,6 +38,12 @@ var advocateSchema = {
     senator: {
         type: Sequelize.STRING
     },
+    senOffice: {
+        type: Sequelize.STRING
+    },
+    senSessionPhone: {
+        type: Sequelize.STRING
+    },
     senEmail: {
         type: Sequelize.STRING
     },
@@ -45,6 +51,12 @@ var advocateSchema = {
         type: Sequelize.TEXT
     },
     representative: {
+        type: Sequelize.STRING
+    },
+    repOffice: {
+        type: Sequelize.STRING
+    },
+    repSessionPhone: {
         type: Sequelize.STRING
     },
     repEmail: {

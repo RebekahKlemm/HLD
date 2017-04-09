@@ -28,10 +28,13 @@ class Advocate extends Component {
                 </select>
                 <p>Notes: {this.props.advocate.notesAttendee}</p>
                 <p>{this.props.advocate.city}</p>
-                <h3>Senator {this.props.advocate.senator}</h3>
-                <SenBuds senator={this.props.advocate.senator} advocates={this.props.advocates} currentAdvocate = {this.props.advocate}></SenBuds>
                 <h3>Representative {this.props.advocate.representative}</h3>
+                <h4>House District {this.props.advocate.houseDist}</h4>
                 <RepBuds representative={this.props.advocate.representative} advocates={this.props.advocates} currentAdvocate = {this.props.advocate}></RepBuds>
+                <h3>Senator {this.props.advocate.senator}</h3>
+                <h4>Senate District {this.props.advocate.senDist}</h4>
+                <SenBuds senator={this.props.advocate.senator} advocates={this.props.advocates} currentAdvocate = {this.props.advocate}></SenBuds>
+
                 {/*<p>Email: {this.props.advocate.email}</p>*/}
                 {/*<p>Congressional District {this.props.advocate.congDist}</p>*/}
                 {/*<p>Senate District {this.props.advocate.sendDist}</p>*/}

@@ -9,6 +9,7 @@ import UserDisplay from './containers/UserDisplay';
 import AdminContainer from './containers/AdminContainer';
 import Welcome from './containers/Welcome';
 import CheckInContainer from './containers/CheckInContainer';
+import CoverageContainer from './containers/CoverageContainer';
 import Advocate from './containers/Advocate';
 import {Provider} from 'react-redux';
 import store from '../store';
@@ -60,11 +61,15 @@ const onAdvocateEnter = function (props){
         .then(advocate => store.dispatch(setCurrentAdvocate(advocate)))
 };
 
-const onCheckInEnter = function (props){
+const onCheckInEnter = function (){
     axios.get('/api/advocates/')
         .then(response => response.data)
         .then(advocates => store.dispatch(receiveAdvocates(advocates)))
 };
+
+// const onCoverageEnter = function(){
+//
+// }
 
 ReactDOM.render(
     <Provider store={store}>
@@ -78,6 +83,7 @@ ReactDOM.render(
                 <Route path='/checkin' component={CheckInContainer} onEnter={onCheckInEnter}/>
                 <Route path='/checkin/:id' component={Advocate} onEnter={onAdvocateEnter}/>
                 <Route path='/signup' component={SignupContainer}/>
+                <Route path='/coverage' component={CoverageContainer} onEnter={onCheckInEnter}/>
             </Route>
         </Router>
     </Provider>,
