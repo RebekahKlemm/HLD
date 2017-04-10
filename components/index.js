@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, hashHistory, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, hashHistory, IndexRoute, browserHistory} from 'react-router';
+
+
+
+
 // import Signup from './Signup';
 import SignupContainer from './containers/SignupContainer';
 import {App} from './App';
@@ -56,12 +60,15 @@ const onUserDisplayEnter = function (props) {
 };
 
 const onAdvocateEnter = function (props){
+    console.log('onAdvocateEnter')
+
     axios.get('/api/advocates/' + props.params.id)
         .then(response => response.data)
         .then(advocate => store.dispatch(setCurrentAdvocate(advocate)))
 };
 
 const onCheckInEnter = function (){
+    console.log('onCheckInEnter')
     axios.get('/api/advocates/')
         .then(response => response.data)
         .then(advocates => store.dispatch(receiveAdvocates(advocates)))
@@ -70,6 +77,8 @@ const onCheckInEnter = function (){
 // const onCoverageEnter = function(){
 //
 // }
+
+
 
 ReactDOM.render(
     <Provider store={store}>

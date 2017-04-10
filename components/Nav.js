@@ -12,8 +12,8 @@ export default function Nav() {
 
                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul className="nav navbar-nav">
-                        <li><Link to='/signup'>Signup <span className="sr-only">(current)</span></Link></li>
-                        <li><Link to="/checkin">Check In</Link></li>
+                        <li><Link to='/signup' activeClassName="active">Signup</Link></li>
+                        <li><Link to="/checkin" >Check In</Link></li>
                         <li><Link to="/coverage">Coverage</Link></li>
                     </ul>
                     <ul className="nav navbar-nav navbar-right">

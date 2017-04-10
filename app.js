@@ -29,6 +29,24 @@ app.get('/', function (req, res, next) {
     res.sendFile(path.join(__dirname, './components/index.html'));
 });
 
+app.get('/checkIn', function (req, res, next) {
+    // console.log('in app.js, here is req.session', req.session)
+    res.sendFile(path.join(__dirname, './components/index.html'));
+});
+
+app.get('/coverage', function (req, res, next) {
+    // console.log('in app.js, here is req.session', req.session)
+    res.sendFile(path.join(__dirname, './components/index.html'));
+});
+
+app.get('/signup', function (req, res, next) {
+    // console.log('in app.js, here is req.session', req.session)
+    res.sendFile(path.join(__dirname, './components/index.html'));
+});
+
+
+
+
 app.use(function (err, req, res, next) {
     console.error(err, err.stack);
     res.status(err.status || 500).send(err);

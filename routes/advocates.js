@@ -11,6 +11,7 @@ router.get('/', function(req, res, next){
             res.send(advocates)
         })
         .catch(function(error){
+            console.log('error', error);
             res.send('You got an error in the routes/advocates get api call');
         })
 })
