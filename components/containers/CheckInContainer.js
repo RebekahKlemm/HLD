@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Advocates from '../Advocates';
 import FilterInput from '../FilterInput';
 import {connect} from 'react-redux';
+import ReactTooltip from 'react-tooltip';
+import AdvocateHover from '../AdvocateHover';
 
 class CheckInContainer extends Component {
     constructor(props) {
@@ -26,14 +28,26 @@ class CheckInContainer extends Component {
         const totalYes = this.props.advocates.allAdvocates.filter(advocate => advocate.checkedIn === 'yes').length;
         const totalNo = this.props.advocates.allAdvocates.filter(advocate => advocate.checkedIn === 'no').length;
         const totalCancelled = this.props.advocates.allAdvocates.filter(advocate => advocate.checkedIn === 'cancelled').length;
+        const yesListArray = (this.props.advocates.allAdvocates.filter(advocate => advocate.checkedIn === 'yes')).map(advocate => advocate.firstName + " " + advocate.lastName)
+        const noListArray = (this.props.advocates.allAdvocates.filter(advocate => advocate.checkedIn === 'no')).map(advocate => advocate.firstName + " " + advocate.lastName)
+        const cancelledListArray = (this.props.advocates.allAdvocates.filter(advocate => advocate.checkedIn === 'cancelled')).map(advocate => advocate.firstName + " " + advocate.lastName)
 
         return (
             <div className='CheckInContainer center'>
                 <h2 className="center">Check In</h2>
                 <h3>
-                    <span className="extraPadding"> Yes: {totalYes} </span>
-                    <span className="extraPadding"> No: {totalNo} </span>
-                    <span className="extraPadding"> Cancelled: {totalCancelled} </span>
+                    <span className="extraPadding" data-for='yesList' data-tip> Yes: {totalYes} </span>
+                    <ReactTooltip id='yesList' place="bottom">
+                        <AdvocateHover advocates={yesListArray}/>
+                    </ReactTooltip>
+                    <span className="extraPadding" data-for='noList' data-tip> No: {totalNo} </span>
+                    <ReactTooltip id='noList' place="bottom">
+                        <AdvocateHover advocates={noListArray}/>
+                    </ReactTooltip>
+                    <span className="extraPadding" data-for='cancelledList' data-tip> Cancelled: {totalCancelled} </span>
+                    <ReactTooltip id='cancelledList' place="bottom">
+                        <AdvocateHover advocates={cancelledListArray}/>
+                    </ReactTooltip>
                 </h3>
                 <FilterInput
                     handleChange={this.handleChange}

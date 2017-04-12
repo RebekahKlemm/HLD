@@ -128,3 +128,10 @@
     padding: 6px;
 }
 
+.noBullets {
+    list-style: none;
+}
+
+.left {
+    text-align: center;
+}
