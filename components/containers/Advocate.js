@@ -26,13 +26,18 @@ class Advocate extends Component {
                     <option value="no">No</option>
                     <option value="cancelled">Cancelled</option>
                 </select>
-                <p>Notes: {this.props.advocate.notesAttendee}</p>
-                <p>{this.props.advocate.city}</p>
+                <p><b>Advocate Notes: </b> {this.props.advocate.notesAttendee}</p>
+                {/*<p>{this.props.advocate.city}</p>*/}
+                <br/>
                 <h3>Representative {this.props.advocate.representative}</h3>
-                <h4>House District {this.props.advocate.houseDist}</h4>
+                {/*<h4>House District {this.props.advocate.houseDist}</h4>*/}
+                <p><b>Representative Notes: </b>{this.props.advocate.repNotes}</p>
                 <RepBuds representative={this.props.advocate.representative} advocates={this.props.advocates} currentAdvocate = {this.props.advocate}></RepBuds>
+                <br/>
                 <h3>Senator {this.props.advocate.senator}</h3>
-                <h4>Senate District {this.props.advocate.senDist}</h4>
+                {/*<h4>Senate District {this.props.advocate.senDist}</h4>*/}
+                <p><b>Senator Notes: </b>{this.props.advocate.senNotes}</p>
+
                 <SenBuds senator={this.props.advocate.senator} advocates={this.props.advocates} currentAdvocate = {this.props.advocate}></SenBuds>
 
                 {/*<p>Email: {this.props.advocate.email}</p>*/}
@@ -42,8 +47,6 @@ class Advocate extends Component {
                 {/*<p>Address Line 1 {this.props.advocate.street1}</p>*/}
                 {/*<p>Address Line 2 {this.props.advocate.street2}</p>*/}
                 {/*<p>Zip Code {this.props.advocate.zip}</p>*/}
-                {/*<p>Senator Notes {this.props.advocate.senNotes}</p>*/}
-                {/*<p>Representative Notes {this.props.advocate.repNotes}</p>*/}
             </div>
         )
     }

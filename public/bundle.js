@@ -32105,7 +32105,7 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
-	                            { to: '/signup', activeClassName: 'active' },
+	                            { to: '/signup' },
 	                            'Signup'
 	                        )
 	                    ),
@@ -53328,14 +53328,15 @@
 	                _react2.default.createElement(
 	                    'p',
 	                    null,
-	                    'Notes: ',
+	                    _react2.default.createElement(
+	                        'b',
+	                        null,
+	                        'Advocate Notes: '
+	                    ),
+	                    ' ',
 	                    this.props.advocate.notesAttendee
 	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    this.props.advocate.city
-	                ),
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'h3',
 	                    null,
@@ -53343,12 +53344,17 @@
 	                    this.props.advocate.representative
 	                ),
 	                _react2.default.createElement(
-	                    'h4',
+	                    'p',
 	                    null,
-	                    'House District ',
-	                    this.props.advocate.houseDist
+	                    _react2.default.createElement(
+	                        'b',
+	                        null,
+	                        'Representative Notes: '
+	                    ),
+	                    this.props.advocate.repNotes
 	                ),
 	                _react2.default.createElement(_RepBuds2.default, { representative: this.props.advocate.representative, advocates: this.props.advocates, currentAdvocate: this.props.advocate }),
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'h3',
 	                    null,
@@ -53356,10 +53362,14 @@
 	                    this.props.advocate.senator
 	                ),
 	                _react2.default.createElement(
-	                    'h4',
+	                    'p',
 	                    null,
-	                    'Senate District ',
-	                    this.props.advocate.senDist
+	                    _react2.default.createElement(
+	                        'b',
+	                        null,
+	                        'Senator Notes: '
+	                    ),
+	                    this.props.advocate.senNotes
 	                ),
 	                _react2.default.createElement(_SenBuds2.default, { senator: this.props.advocate.senator, advocates: this.props.advocates, currentAdvocate: this.props.advocate })
 	            );
@@ -53733,11 +53743,7 @@
 	            newState.currentAlerts = [].concat(_toConsumableArray(action.currentAlerts));
 	            break;
 	        case _constants.ADD_ALERT:
-	            // console.log('inside alert reducer, here is action.alert', action.alert);
-	            // console.log('inside alert reducer, here is newState.allAlerts - before', newState.allAlerts);
 	            newState.allAlerts = [].concat(_toConsumableArray(newState.allAlerts), [action.alert]);
-	            // console.log('inside alert reducer, here is newState.allAlerts - after', newState.allAlerts);
-	
 	            newState.currentAlerts = [].concat(_toConsumableArray(newState.currentAlerts), [action.alert]);
 	            break;
 	        default:

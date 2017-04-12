@@ -40,7 +40,6 @@ router.post('/add', function(req, res, next){
 })
 
 router.post('/checkIn', function(req, res, next){
-    console.log('checkIn req', req);
     Advocate.findOne({
         where:{id: req.body[0]}
     })
