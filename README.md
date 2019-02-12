@@ -1,16 +1,8 @@
-# animalalerts
-Animal Alerts is designed to be used by animal welfare nonprofits, like the Humane Society of the United States, as a way to alert animal advocates to legislation, actions, or petitions that affect animals.  
+# Humane Lobby Day (HLD)
+This app is designed to ease the check-in process for Humane Lobby Day, a day of grassroots lobbying of state legislators, organized by the Humane Society of the United States.  
 
-Advocates (users) can sign up and choose from a number of interest categories (e.g. Wildlife, Farm Animals, or Domestic Pets).  When they log in, they will see their elected officials and contact information based on the address they provided at signup, and alerts based on the category(ies) they have signed up for.  Currently, the app displays a user's state senator(s) and representative(s), but may be updated in the future to include federal legislators.  They can also edit their account using the form at the bottom of the user page.  Any fields left blank will remain the same, any fields that are updated will change accordingly.
+At the top of the main page, there is a tally of number of people who have checked in, who have not yet checked in, and who have cancelled. Hovering over these numbers will bring up a tooltip that displays the names of the people in each category.
 
-Admins are the only ones that are allowed to send alerts.  New alerts can be sent to a single interest category or multiple interest categories. Admins can also see a list of all the alerts that have been sent (an Outbox), and can add or remove Admins from the list of existing users.
+When a person is ready to check in, an HSUS volunteer can quickly and easily search the list of registered names to find the person. Clicking on the person's name will bring up a details page, where the volunteer can change the person's check in status to Yes, No, or Cancelled.  The details page also displays the person's Representative and Senator, as well as the names of other people who have the same legislators and whether those people have checked in yet.
 
-The database is currently seeded with two users and one admin.  Logins are based on phone numbers, but I decided not to force 10 digits simply to make the app easier to navigate for demo purposes.
-  Joe is a user, signed up to receive Wildlife alerts.  Login is 123, password is joe.
-  Bill is a user, signed up to receive Domestic Pets alerts.  Login is 456, password is bill.
-  Susie is the admin.  Login is 789, password is admin.
-
-
-**** Please note that users must provide a real address in order for the legislator lookup functionality to work properly. Future updates may include automatic validation.  For now, just play nice and use a real address. ****
-
-Additionally, the phone numbers are used as the userID, so they must be unique to each user.  I did that intentionally because I intend to hook this up to Twilio in the future to allow the alerts to be sent via text messages.  For now, you can use a fake number since the alerts aren't actually sent out as texts.
+There is also a coverage page that shows the Representatives and Senators who had at least one constituent register but who do not have anyone checked in yet.  This allows for a quick way to identify which meetings need to be cancelled due to No-Shows.
